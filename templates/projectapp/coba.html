@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Coba</title>
+  </head>
+  <body>
+    <h1>Coba Berhasil</h1>
+    <!-- <div class="container">
+      <form method="post">
+        <div class="form-group">
+          <label for="startdate">Start-Date</label>
+          <input type="datetime" class="form-control" id="startdate">
+          <label for="enddate">End-Date</label>
+          <input type="datetime" class="form-control" id="enddate">
+        </div>
+      </form>
+    </div> -->
+
+    <form action="/external/" method="post">
+      {% csrf_token %}
+      Input Text:
+      <input type="text" name="param" required><br><br>
+      {{data_external}}<br><br>
+      {{data1}}
+      <br><br>
+      <input type="submit" value="Execute External Python Script">
+    </form>
+
+  </body>
+</html>
