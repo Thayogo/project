@@ -31,6 +31,7 @@ def external(request):
 def generate_table(request):
 
     #Dapatkan input yang dikirim
+    import json
     post = json.loads(request.POST.get('data',''))
 
     input_name=post['input_name']
@@ -45,8 +46,6 @@ def generate_table(request):
                     })
 
     #Untuk mengirim dataframe balik, harus di konversi menjadi json:
-    import json
-
     def ser_df(df):
         df_columns= [{"data":f,"field": f, "title": f} for f in df]
         df_data = df.to_dict('records')
