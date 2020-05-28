@@ -1,31 +1,86 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+    <!--IMPORT JQUERY-->
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+    <!--IMPORT DATATABLES-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
     <meta charset="utf-8">
     <title>Coba</title>
   </head>
+
   <body>
     <h1>Coba Berhasil</h1>
-    <!-- <div class="container">
-      <form method="post">
-        <div class="form-group">
-          <label for="startdate">Start-Date</label>
-          <input type="datetime" class="form-control" id="startdate">
-          <label for="enddate">End-Date</label>
-          <input type="datetime" class="form-control" id="enddate">
-        </div>
-      </form>
-    </div> -->
 
-    <form action="/external/" method="post">
-      {% csrf_token %}
-      Input Text:
-      <input type="text" name="param" required><br><br>
-      {{data_external}}<br><br>
-      {{data1}}
-      <br><br>
-      <input type="submit" value="Execute External Python Script">
-    </form>
+    <!-- Bikin Form -->
+
+    Name:
+    <input type="text" id="input_name" value="Bob">
+    <br>
+
+    Salary:
+    <input type="number" id="input_salary" value=1000>
+    <br>
+
+    Multiplier:
+    <input type="number" id="input_multiplier" value=5>
+    <br><br>
+
+    <!-- Bikin Button. Waktu di click dia jalanin fungsi Generate() -->
+    <button onclick="Generate()"> Create Table </button>
+
+    <br><br>
+
+    <!-- Tabel nanti muncul di sini -->
+    <table id="my_table" class="display">
+    </table>
 
   </body>
+
 </html>
+
+<script>
+
+  function Generate(){
+
+    //Dapatkan nilai dari input form berdasarkan id mereka
+    var input_name=$("#input_name").val()
+    var input_salary=$("#input_salary").val()
+    var input_multiplier=$("#input_multiplier").val()
+
+    //Masukan jadi satu paket yang akan di kirim
+    var post={'input_name':input_name,
+              'input_salary':input_salary,
+              'input_multiplier':input_multiplier}
+
+    //Jalankan ajax
+    //ajax akan menjalankan python script dalam url nya (def generate_table)
+    $.ajax({
+      type: "POST",
+      url: "{% url 'generate_table'%}",
+      data: {csrfmiddlewaretoken: '{{ csrf_token }}','data':JSON.stringify(post)},
+      success: function callback(response){
+           //Jika berhasil, hasil script akan di kembalikan dalam variable response
+           console.log(response);
+           //Buat table dengan hasil response
+           LoadTable(response)
+        }
+    });
+
+  }
+
+  //Fungsi pembuat datatable
+  function LoadTable(response){
+
+    $('#my_table').dataTable({
+      destroy: true,
+      data: response['table']['data'],
+      columns: response['table']['columns'],
+    });
+
+  }
+
+</script>

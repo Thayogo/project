@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^$',views.index, name='index'),
     url(r'gejala/',include('projectapp.urls')),
     url(r'external/',views.external),
+    url(r'generate_table/',views.generate_table,name='generate_table'),
 ]
